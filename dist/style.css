@@ -53,13 +53,21 @@ a {
     font-size: 20px;
     font-weight: bold;
 }
+.bottom_paragraph{
+    text-align: center;
+    margin: auto;
+
+}
 
 a:hover {
     color: #000;
     background: #fff;
 }
 
-.euVideo {
+/* .euVideo {
  
   
-}
+} */
+
+
+

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>    
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Connect With Rummy</title>
+        <link rel="icon" href="logo.png" type="image/x-icon" />
+
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">   
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">     
+        <style>
+            body{
+                font-family: Arial, sans-serif;
+
+            }
+
+            .toggle-controls{margin:20px 0;display:flex;gap:8px;justify-content:center}
+            .toggle-btn{padding:8px 14px;border:1px solid #e6e6e6;background:#f0f0f0;color:#333;cursor:pointer;border-radius:8px;transition:transform .12s,box-shadow .12s,opacity .12s}
+            .toggle-btn:not(.active){opacity:0.85;filter:grayscale(4%);transform:scale(1)}
+            .toggle-btn.active{background:linear-gradient(180deg,#ffffff,#fbfdff);color:#0b57d0;border:2px solid #0b57d0;box-shadow:0 10px 28px rgba(11,87,208,0.12);transform:translateY(-3px) scale(1.04);font-weight:700}
+            .toggle-btn:focus{outline:3px solid rgba(11,87,208,0.12);outline-offset:4px}
+            .profile-section{display:none;text-align:center}
+            .profile-section .links{display:block;margin:8px auto}
+
+        </style>
+           
+    </head>
+    <body>
+        <link rel="stylesheet" href="dist/style.css">         
+        
+      
+
+   
+   
+
+    
+  <div class="myvideo">
+    <!-- <video class="profile-picture autoplay=" muted="" loop=""> -->
+                  <!-- <source src="https://davila.uno/video/ed-video.mp4" type="video/mp4">
+                  <source src="https://davila.uno/video/ed-video.webm" type="video/webm"> -->
+                  <!-- <source src="video.ogv" type="video/ogg" /> -->
+                  <img class="profile-picture"src="img/logo.png" alt="profile_img">
+                  <!-- Su navegador no soporta contenido multimedia.
+                </video> -->
+  </div>
+     
+    
+
+    
+    <div class="toggle-controls">
+        <button class="toggle-btn active" data-target="rummyshoots" data-image="img/rummy.jpeg">Rummyshoots</button>
+        <button class="toggle-btn" data-target="rummspace" data-image="img/rummspace.png">Rummspace</button>
+    </div>
+
+    <div id="rummyshoots" class="profile-section">
+        <div class="profile-name">@rummyshoots</div>
+
+        <!-- Links-->
+        <a href="https://www.instagram.com/rummyshoots/" target="_blank" rel="noopener noreferrer" class="links"><img src="img/instagram.png" height="20"> Instagram</a>
+        <a href="https://www.tiktok.com/@rummyax?lang=en" target="_blank" rel="noopener noreferrer" class="links"><img src="img/tiktok.png" height="20">  TikTok</a>
+        <a href="https://www.linkedin.com/in/moinul-khan-647535238/" target="_blank" rel="noopener noreferrer" class="links"><img src="img/linkedin.png" height="20"> Linkedin</a>
+        <a href="https://github.com/MoinulAx" target="_blank" rel="noopener noreferrer" class="links"><img src="img/github.png" height="20"> Github</a>
+        <a href="https://www.youtube.com/channel/UCDpaTWkFqvNVkINakxq9UbA" target="_blank" rel="noopener noreferrer" class="links"><img src="img/youtube.png" height="20"> YouTube</a>
+    </div>
+
+    <!-- Company: Rummspace -->
+    <div id="rummspace" class="profile-section">
+        <div class="profile-name">@rummspace</div>
+        <a href="#" target="_blank" rel="noopener noreferrer" class="links"><img src="img/instagram.png" height="20"> Instagram</a>
+        <a href="#" target="_blank" rel="noopener noreferrer" class="links"><img src="img/tiktok.png" height="20">  TikTok</a>
+        <a href="#" target="_blank" rel="noopener noreferrer" class="links"><img src="img/linkedin.png" height="20"> Linkedin</a>
+        <a href="#" target="_blank" rel="noopener noreferrer" class="links"><img src="img/github.png" height="20"> Github</a>
+        <a href="#" target="_blank" rel="noopener noreferrer" class="links"><img src="img/youtube.png" height="20"> YouTube</a>
+    </div>
+
+    <div class="bottom-text">About Me</div>
+
+    <p class="bottom_paragraph">Passionate about web and Full Stack Development, I'm also a photographer and musician, expressing creativity through visuals and music. Operating a contracting company specializing in video editing and photography, I collaborate to create compelling visuals. With a curiosity-driven mindset, I explore my path and connect with inspiring individuals. Eager to contribute to meaningful projects. Let's create something great together!</p>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            const buttons = document.querySelectorAll('.toggle-btn');
+            const sections = document.querySelectorAll('.profile-section');
+            function show(id){
+                sections.forEach(s => { s.style.display = s.id === id ? 'block' : 'none'; });
+                buttons.forEach(b => { b.classList.toggle('active', b.dataset.target === id); });
+                const activeBtn = Array.from(buttons).find(b => b.dataset.target === id);
+                const imgSrc = activeBtn && activeBtn.dataset.image ? activeBtn.dataset.image : document.querySelector('.profile-picture')?.src;
+                const profileImg = document.querySelector('.profile-picture');
+                if(profileImg && imgSrc) profileImg.src = imgSrc;
+            }
+            buttons.forEach(b => b.addEventListener('click', () => show(b.dataset.target)));
+            show('rummyshoots');
+        });
+    </script>
+
+</body>
+</html>

@@ -41,7 +41,7 @@ body {
     display: block;
     margin: 10% auto 0;
     max-width: 200px; /* Increased size of profile picture */
-    border-radius: 50%;
+    border-radius: 25%;
 }
 
 /* Profile name styles */

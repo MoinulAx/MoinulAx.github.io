@@ -390,7 +390,7 @@
 
     const data = {
     rummyshoots: { handle: '@rummyshoots', img: 'img/rummy.jpeg' },
-    rummspace:   { handle: '@rummspace',   img: 'img/rs-logo.png' }
+    rummspace:   { handle: '@rummspace',   img: 'img/rs-logo.svg' }
   };
 
   buttons.forEach(btn => {
@@ -405,7 +405,7 @@
       setTimeout(() => {
         profileImg.src = data[target].img;
         if (target === 'rummspace') {
-          profileImg.style.filter = 'grayscale(0%) brightness(0.9)';
+          profileImg.style.filter = 'none';
         } else {
           profileImg.style.filter = 'grayscale(100%) contrast(1.1)';
         }

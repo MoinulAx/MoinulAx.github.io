@@ -10,6 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    @view-transition { navigation: auto; }
+
     :root {
       --bg: #0e1117;
       --ink: #e8eaed;
@@ -150,33 +152,25 @@
       margin-bottom: 14px;
     }
     .section-label::before { content: '// '; color: var(--yellow); }
-    .series {
+    .topics {
       list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .topics li {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      padding: 9px 14px;
       border: 1px solid var(--line);
       border-radius: 4px;
       background: rgba(14,17,23,0.85);
+      transition: border-color 0.2s, color 0.2s;
     }
-    .series li {
-      display: flex;
-      gap: 14px;
-      align-items: baseline;
-      padding: 12px 18px;
-      font-size: 0.95rem;
-      line-height: 1.4;
-    }
-    .series li + li { border-top: 1px solid var(--line); }
-    .series .num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--yellow);
-      flex-shrink: 0;
-      width: 1.6em;
-    }
-    .series code {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85em;
-      color: var(--yellow);
-      font-variant-ligatures: none;
+    .topics li:hover { border-color: var(--yellow); color: var(--yellow); }
+    .topics li.more {
+      border-style: dashed;
+      color: var(--mid);
     }
     .next {
       margin-top: 14px;
@@ -208,6 +202,7 @@
     @keyframes blink { 50% { opacity: 0; } }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
+      @view-transition { navigation: none; }
     }
 
     svg { display: block; }
@@ -218,7 +213,7 @@
 
   <a class="back" href="./">← rummy</a>
 
-  <img class="avatar" src="img/rc-logo.png" alt="RummyCodes logo" width="132" height="132">
+  <img class="avatar" style="view-transition-name: av-codes" src="img/rc-logo.png" alt="RummyCodes logo" width="132" height="132">
 
   <h1 class="name">RummyCodes</h1>
   <div class="handle">@rummycodes</div>
@@ -264,24 +259,23 @@
 
   </div>
 
-  <section class="section" aria-labelledby="series-label">
-    <h2 class="section-label" id="series-label">python series</h2>
-    <ol class="series">
-      <li><span class="num">01</span>Python is secretly C</li>
-      <li><span class="num">02</span>Python's GIL</li>
-      <li><span class="num">03</span>How Python cleans up its own memory</li>
-      <li><span class="num">04</span>Why Python lists are secretly arrays</li>
-      <li><span class="num">05</span><span>What <code>import</code> really does</span></li>
-      <li><span class="num">06</span><span>Why <code>0.1 + 0.2</code> isn't <code>0.3</code></span></li>
-      <li><span class="num">07</span><span>When <code>is</code> and <code>==</code> disagree</span></li>
-      <li><span class="num">08</span>The mutable default argument trap</li>
-      <li><span class="num">09</span>Where pip puts packages</li>
-      <li><span class="num">10</span>Python under the hood, the wrap-up</li>
-    </ol>
-    <p class="next">Every short has a full lesson on YouTube, completely free. <strong>Next up: AI with Python.</strong></p>
+  <section class="section" aria-labelledby="topics-label">
+    <h2 class="section-label" id="topics-label">what we cover</h2>
+    <ul class="topics">
+      <li>Python</li>
+      <li>AI with Python</li>
+      <li>JavaScript</li>
+      <li>Frameworks</li>
+      <li>Git</li>
+      <li>Databases</li>
+      <li>APIs</li>
+      <li>How the web works</li>
+      <li class="more">and more<span class="cursor"></span></li>
+    </ul>
+    <p class="next">Short reels explain the idea. <strong>The full lessons are on YouTube, completely free.</strong></p>
   </section>
 
-  <div class="foot">rc<span class="cursor"></span></div>
+  <div class="foot">rc_</div>
 
 </div>
 </body>

@@ -4,15 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rummy</title>
+  <meta name="description" content="Rummy's accounts: Rummyshoots, RummSpace and RummyCodes.">
   <link rel="icon" href="img/rummy.jpeg" type="image/jpeg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@300;400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    @view-transition { navigation: auto; }
+
     :root {
       --black: #0a0a0a;
       --white: #f5f5f0;
-      --mid: #888;
-      --accent: #e8e0d0;
+      --mid: #8a8a85;
+      --line: rgba(255,255,255,0.1);
+      --shoots: #f5f5f0;
+      --space: #da8b90;
+      --codes: #ffd43b;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -36,38 +43,192 @@
       opacity: 0.6;
     }
 
-    /* Horizontal rule accent */
-    .rule {
-      width: 40px;
-      height: 1px;
-      background: var(--mid);
+    .container {
+      max-width: 520px;
       margin: 0 auto;
+      padding: 64px 20px 80px;
     }
 
-    /* ── LAYOUT ── */
-    .container {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 60px 24px 80px;
+    .view { display: none; }
+    .view.active { display: block; }
+
+    .mono {
+      font-family: 'Space Mono', monospace;
+      text-transform: uppercase;
+    }
+
+    .section-rule {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      font-weight: 400;
+      color: var(--mid);
+      animation: fadeUp 0.8s ease both;
+    }
+    .section-rule::before, .section-rule::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    /* ── ACCOUNT CARDS ── */
+    .accounts {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .accounts li { animation: fadeUp 0.8s ease both; }
+    .accounts li:nth-child(1) { animation-delay: 0.1s; }
+    .accounts li:nth-child(2) { animation-delay: 0.18s; }
+    .accounts li:nth-child(3) { animation-delay: 0.26s; }
+
+    .card {
+      --accent: var(--white);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 18px;
+      padding: 18px;
+      color: var(--white);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      background: rgba(255,255,255,0.025);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, background 0.25s, transform 0.25s;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.25s;
+    }
+    .card:hover, .card:focus-visible {
+      border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+      background: rgba(255,255,255,0.05);
+      transform: translateY(-2px);
+      outline: none;
+    }
+    .card:hover::before, .card:focus-visible::before { transform: scaleY(1); }
+    .card.shoots { --accent: var(--shoots); }
+    .card.space  { --accent: var(--space); }
+    .card.codes  { --accent: var(--codes); }
+
+    .card-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 3px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+    }
+    .card:hover .card-avatar { transform: scale(1.04); }
+    .grayscale { filter: grayscale(100%) contrast(1.1); }
+
+    .card-body { min-width: 0; }
+    .card-num {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      opacity: 0.85;
+    }
+    .card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin: 2px 0 2px;
+    }
+    .card-desc {
+      font-size: 1.05rem;
+      line-height: 1.35;
+      color: rgba(245,245,240,0.7);
+    }
+    .card-handle {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      color: var(--mid);
+    }
+    .card-arrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      color: var(--accent);
+      opacity: 0.5;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .card:hover .card-arrow { opacity: 1; transform: translateX(4px); }
+
+    /* ── ABOUT ── */
+    .about {
+      margin-top: 52px;
+      text-align: center;
+      animation: fadeUp 0.8s 0.35s ease both;
+    }
+    .elsewhere {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 22px;
+    }
+    .elsewhere a {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      color: var(--mid);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .elsewhere a:hover { color: var(--white); border-color: rgba(255,255,255,0.35); }
+    .elsewhere svg { width: 18px; height: 18px; }
+
+    /* ── PROFILE VIEW ── */
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--mid);
+      text-decoration: none;
+      padding: 8px 0;
+      margin-bottom: 28px;
+      transition: color 0.2s;
+    }
+    .back:hover { color: var(--white); }
+
+    .profile-head {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0;
+      text-align: center;
+      margin-bottom: 32px;
     }
-
-    /* ── PHOTO ── */
     .photo-wrap {
       position: relative;
       width: 148px;
       height: 148px;
-      margin-bottom: 28px;
-      animation: fadeUp 0.9s ease both;
+      margin-bottom: 26px;
     }
     .photo-wrap::after {
       content: '';
       position: absolute;
-      inset: -5px;
-      border: 1px solid rgba(255,255,255,0.15);
+      inset: -6px;
+      border: 1px solid var(--accent, rgba(255,255,255,0.2));
+      opacity: 0.35;
       border-radius: 4px;
       pointer-events: none;
     }
@@ -77,74 +238,35 @@
       object-fit: cover;
       border-radius: 3px;
       display: block;
-      filter: grayscale(100%) contrast(1.1);
     }
-
-    /* ── NAME ── */
-    .name {
+    .profile-name {
       font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
+      font-size: 2.3rem;
       font-weight: 700;
-      letter-spacing: 0.04em;
-      text-align: center;
       line-height: 1;
-      animation: fadeUp 0.9s 0.1s ease both;
     }
-    .handle {
-      font-family: 'Space Mono', monospace;
+    .profile-handle {
       font-size: 0.75rem;
-      color: var(--mid);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-top: 8px;
-      text-align: center;
-      animation: fadeUp 0.9s 0.2s ease both;
+      letter-spacing: 0.18em;
+      color: var(--accent, var(--mid));
+      margin-top: 10px;
     }
+    .profile-desc {
+      font-size: 1.1rem;
+      font-weight: 300;
+      line-height: 1.6;
+      color: rgba(245,245,240,0.65);
+      margin-top: 14px;
+      max-width: 360px;
+    }
+    #rummyshoots { --accent: var(--shoots); }
+    #rummspace   { --accent: var(--space); }
 
-    /* ── TOGGLE ── */
-    .toggle {
-      display: flex;
-      gap: 0;
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 2px;
-      overflow: hidden;
-      margin: 32px 0 28px;
-      animation: fadeUp 0.9s 0.3s ease both;
-    }
-    .toggle-btn {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      background: transparent;
-      color: var(--mid);
-      border: none;
-      padding: 10px 14px;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-      position: relative;
-    }
-    .toggle-btn + .toggle-btn {
-      border-left: 1px solid rgba(255,255,255,0.15);
-    }
-    .toggle-btn.active {
-      background: var(--white);
-      color: var(--black);
-      font-weight: 700;
-    }
-
-    /* ── PROFILE SECTION ── */
-    .profile-section { display: none; width: 100%; animation: fadeUp 0.4s ease both; }
-    .profile-section.visible { display: block; }
-
-    /* ── LINKS ── */
     .links-list {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      width: 100%;
     }
-
     .link-item {
       display: flex;
       align-items: center;
@@ -152,19 +274,25 @@
       padding: 16px 22px;
       text-decoration: none;
       color: var(--white);
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid var(--line);
       border-radius: 2px;
       background: rgba(255,255,255,0.025);
       transition: background 0.2s, border-color 0.2s, transform 0.15s;
       position: relative;
       overflow: hidden;
+      animation: fadeUp 0.5s ease both;
     }
+    .link-item:nth-child(2) { animation-delay: 0.05s; }
+    .link-item:nth-child(3) { animation-delay: 0.1s; }
+    .link-item:nth-child(4) { animation-delay: 0.15s; }
+    .link-item:nth-child(5) { animation-delay: 0.2s; }
+    .link-item:nth-child(6) { animation-delay: 0.25s; }
     .link-item::before {
       content: '';
       position: absolute;
       left: 0; top: 0; bottom: 0;
       width: 2px;
-      background: var(--white);
+      background: var(--accent);
       transform: scaleY(0);
       transition: transform 0.2s;
       transform-origin: bottom;
@@ -175,253 +303,223 @@
       transform: translateX(3px);
     }
     .link-item:hover::before { transform: scaleY(1); }
-
     .link-icon {
       width: 18px;
       height: 18px;
-      opacity: 0.6;
+      opacity: 0.65;
       flex-shrink: 0;
-      transition: opacity 0.2s;
     }
     .link-item:hover .link-icon { opacity: 1; }
-
     .link-label {
-      font-family: 'Space Mono', monospace;
       font-size: 0.8rem;
       letter-spacing: 0.15em;
-      text-transform: uppercase;
     }
     .link-arrow {
       margin-left: auto;
       opacity: 0.3;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       transition: opacity 0.2s, transform 0.2s;
     }
     .link-item:hover .link-arrow { opacity: 0.8; transform: translateX(3px); }
 
-    /* ── ABOUT ── */
-    .about {
-      margin-top: 48px;
-      text-align: center;
-      animation: fadeUp 0.9s 0.5s ease both;
-      width: 100%;
-    }
-    .about-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--mid);
-      margin-bottom: 14px;
-    }
-    .about-rule {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-    .about-rule span { flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
-    .about-text {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem;
-      font-weight: 300;
-      line-height: 1.8;
-      color: rgba(245,245,240,0.65);
-      max-width: 380px;
-      margin: 0 auto;
-    }
-
-    /* Rummspace logo section */
-    .rs-logo {
-      width: 120px;
-      margin: 0 auto 12px;
-      display: block;
-      filter: grayscale(100%) brightness(1.4);
-    }
+    .view.active .profile-head { animation: fadeUp 0.5s ease both; }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
+      from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* SVG icons inline */
+    @media (max-width: 380px) {
+      .card { gap: 14px; padding: 14px; }
+      .card-avatar { width: 56px; height: 56px; }
+      .card-name { font-size: 1.25rem; }
+      .card-desc { font-size: 1rem; }
+    }
+    @media (max-width: 340px) {
+      .container { padding-left: 16px; padding-right: 16px; }
+      .card { grid-template-columns: auto 1fr; gap: 12px; }
+      .card-arrow { display: none; }
+      .card-avatar { width: 48px; height: 48px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      @view-transition { navigation: none; }
+    }
+
     svg { display: block; }
   </style>
 </head>
 <body>
-<div class="container">
+<main class="container">
 
-  <!-- Photo -->
-  <div class="photo-wrap">
-    <img src="img/rummy.jpeg" alt="Rummy" id="profile-img">
-  </div>
+  <!-- ══ HOME: every account ══ -->
+  <section id="home" class="view active" aria-label="Accounts">
 
-  <!-- Name -->
-  <div class="name">Rummy</div>
-  <div class="handle" id="handle-text">@rummyshoots</div>
+    <h1 class="section-rule mono">Accounts</h1>
 
-  <!-- Toggle -->
-  <div class="toggle">
-    <button class="toggle-btn active" data-target="rummyshoots">Rummyshoots</button>
-    <button class="toggle-btn" data-target="rummspace">Rummspace</button>
-  </div>
+    <ul class="accounts">
+      <li>
+        <a class="card shoots" href="#rummyshoots">
+          <img class="card-avatar grayscale" src="img/rummy.jpeg" alt="" style="view-transition-name: av-shoots">
+          <div class="card-body">
+            <div class="card-num mono">01</div>
+            <div class="card-name">Rummyshoots</div>
+            <div class="card-desc">Photography and video.</div>
+            <span class="card-handle mono">@rummyshoots</span>
+          </div>
+          <span class="card-arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a class="card space" href="#rummspace">
+          <img class="card-avatar" src="img/rs-logo.svg" alt="" style="view-transition-name: av-space">
+          <div class="card-body">
+            <div class="card-num mono">02</div>
+            <div class="card-name">RummSpace</div>
+            <div class="card-desc">Brooklyn creative studio.</div>
+            <span class="card-handle mono">@rummspace</span>
+          </div>
+          <span class="card-arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a class="card codes" href="rummycodes.html">
+          <img class="card-avatar" src="img/rc-logo.png" alt="" style="view-transition-name: av-codes">
+          <div class="card-body">
+            <div class="card-num mono">03</div>
+            <div class="card-name">RummyCodes</div>
+            <div class="card-desc">Code explained in under a minute.</div>
+            <span class="card-handle mono">@rummycodes</span>
+          </div>
+          <span class="card-arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+    </ul>
 
-  <!-- Rummyshoots -->
-  <div id="rummyshoots" class="profile-section visible">
+    <div class="about">
+      <div class="elsewhere">
+        <a href="https://www.linkedin.com/in/moinul-khan-647535238/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="https://github.com/MoinulAx" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        </a>
+        <a href="https://moinul-khan-web.netlify.app/" target="_blank" rel="noopener noreferrer" aria-label="Website">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2c3 4 3 16 0 20M12 2c-3 4-3 16 0 20" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PROFILE: Rummyshoots ══ -->
+  <section id="rummyshoots" class="view" aria-label="Rummyshoots">
+    <a class="back mono" href="#">← All accounts</a>
+    <div class="profile-head">
+      <div class="photo-wrap"><img class="grayscale" src="img/rummy.jpeg" alt="Rummy" style="view-transition-name: av-shoots"></div>
+      <h2 class="profile-name">Rummyshoots</h2>
+      <div class="profile-handle mono">@rummyshoots</div>
+      <p class="profile-desc">Photography and video by Rummy.</p>
+    </div>
     <div class="links-list">
-
       <a href="https://www.instagram.com/rummyshoots/" target="_blank" rel="noopener noreferrer" class="link-item">
-        <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-        </svg>
-        <span class="link-label">Instagram</span>
-        <span class="link-arrow">→</span>
+        <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        <span class="link-label mono">Instagram</span><span class="link-arrow">→</span>
       </a>
-
       <a href="https://www.tiktok.com/@rummyshoots?lang=en" target="_blank" rel="noopener noreferrer" class="link-item">
-        <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.01a8.16 8.16 0 0 0 4.79 1.53V7.1a4.85 4.85 0 0 1-1.02-.41z"/>
-        </svg>
-        <span class="link-label">TikTok</span>
-        <span class="link-arrow">→</span>
+        <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.01a8.16 8.16 0 0 0 4.79 1.53V7.1a4.85 4.85 0 0 1-1.02-.41z"/></svg>
+        <span class="link-label mono">TikTok</span><span class="link-arrow">→</span>
       </a>
-
-      <a href="https://www.linkedin.com/in/moinul-khan-647535238/" target="_blank" rel="noopener noreferrer" class="link-item">
-        <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
-        </svg>
-        <span class="link-label">LinkedIn</span>
-        <span class="link-arrow">→</span>
-      </a>
-
-      <a href="https://github.com/MoinulAx" target="_blank" rel="noopener noreferrer" class="link-item">
-        <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-        </svg>
-        <span class="link-label">GitHub</span>
-        <span class="link-arrow">→</span>
-      </a>
-
-      <a href="rummycodes.html" class="link-item">
-        <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="8 6 2 12 8 18"/><polyline points="16 6 22 12 16 18"/>
-        </svg>
-        <span class="link-label">RummyCodes</span>
-        <span class="link-arrow">→</span>
-      </a>
-
-      <a href="https://moinul-khan-web.netlify.app/" target="_blank" rel="noopener noreferrer" class="link-item">
-        <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M2 12h20M12 2c3 4 3 16 0 20M12 2c-3 4-3 16 0 20" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <span class="link-label">Website</span>
-        <span class="link-arrow">→</span>
-      </a>
-
       <a href="https://www.youtube.com/channel/UCDpaTWkFqvNVkINakxq9UbA" target="_blank" rel="noopener noreferrer" class="link-item">
-        <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#0a0a0a"/>
-        </svg>
-        <span class="link-label">YouTube</span>
-        <span class="link-arrow">→</span>
+        <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#0a0a0a"/></svg>
+        <span class="link-label mono">YouTube</span><span class="link-arrow">→</span>
       </a>
-
+      <a href="https://www.linkedin.com/in/moinul-khan-647535238/" target="_blank" rel="noopener noreferrer" class="link-item">
+        <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        <span class="link-label mono">LinkedIn</span><span class="link-arrow">→</span>
+      </a>
+      <a href="https://moinul-khan-web.netlify.app/" target="_blank" rel="noopener noreferrer" class="link-item">
+        <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2c3 4 3 16 0 20M12 2c-3 4-3 16 0 20" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="link-label mono">Website</span><span class="link-arrow">→</span>
+      </a>
     </div>
-  </div>
+  </section>
 
-  <!-- Rummspace -->
-  <div id="rummspace" class="profile-section">
+  <!-- ══ PROFILE: RummSpace ══ -->
+  <section id="rummspace" class="view" aria-label="RummSpace">
+    <a class="back mono" href="#">← All accounts</a>
+    <div class="profile-head">
+      <div class="photo-wrap"><img src="img/rs-logo.svg" alt="RummSpace logo" style="view-transition-name: av-space"></div>
+      <h2 class="profile-name">RummSpace</h2>
+      <div class="profile-handle mono">@rummspace</div>
+      <p class="profile-desc">Brooklyn creative studio. Photography, videography, web and branding.</p>
+    </div>
     <div class="links-list">
-
-      <a href="https://www.instagram.com/rummspace/" target="_blank" rel="noopener noreferrer" class="link-item">
-        <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-        </svg>
-        <span class="link-label">Instagram</span>
-        <span class="link-arrow">→</span>
-      </a>
-
-      <a href="https://www.tiktok.com/@rummspace" target="_blank" rel="noopener noreferrer" class="link-item">
-        <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.01a8.16 8.16 0 0 0 4.79 1.53V7.1a4.85 4.85 0 0 1-1.02-.41z"/>
-        </svg>
-        <span class="link-label">TikTok</span>
-        <span class="link-arrow">→</span>
-      </a>
-
-      <a href="https://www.linkedin.com/company/rummspace/" target="_blank" rel="noopener noreferrer" class="link-item">
-        <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
-        </svg>
-        <span class="link-label">LinkedIn</span>
-        <span class="link-arrow">→</span>
-      </a>
-
       <a href="https://www.rummspace.com/" target="_blank" rel="noopener noreferrer" class="link-item">
-        <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M2 12h20M12 2c3 4 3 16 0 20M12 2c-3 4-3 16 0 20" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <span class="link-label">Website</span>
-        <span class="link-arrow">→</span>
+        <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2c3 4 3 16 0 20M12 2c-3 4-3 16 0 20" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="link-label mono">Website</span><span class="link-arrow">→</span>
       </a>
-
+      <a href="https://www.instagram.com/rummspace/" target="_blank" rel="noopener noreferrer" class="link-item">
+        <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        <span class="link-label mono">Instagram</span><span class="link-arrow">→</span>
+      </a>
+      <a href="https://www.tiktok.com/@rummspace" target="_blank" rel="noopener noreferrer" class="link-item">
+        <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.01a8.16 8.16 0 0 0 4.79 1.53V7.1a4.85 4.85 0 0 1-1.02-.41z"/></svg>
+        <span class="link-label mono">TikTok</span><span class="link-arrow">→</span>
+      </a>
       <a href="https://www.youtube.com/@RummSpace" target="_blank" rel="noopener noreferrer" class="link-item">
-        <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#0a0a0a"/>
-        </svg>
-        <span class="link-label">YouTube</span>
-        <span class="link-arrow">→</span>
+        <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#0a0a0a"/></svg>
+        <span class="link-label mono">YouTube</span><span class="link-arrow">→</span>
       </a>
-
+      <a href="https://www.linkedin.com/company/rummspace/" target="_blank" rel="noopener noreferrer" class="link-item">
+        <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        <span class="link-label mono">LinkedIn</span><span class="link-arrow">→</span>
+      </a>
     </div>
-  </div>
+  </section>
 
-  <!-- About -->
-  <div class="about">
-    <div class="about-rule">
-      <span></span>
-      <div class="about-label">About</div>
-      <span></span>
-    </div>
-    <p class="about-text">Full stack developer, photographer & musician. Contracting company specializing in video editing and photography. Let's create something great together.</p>
-  </div>
-
-</div>
+</main>
 
 <script>
-  const buttons = document.querySelectorAll('.toggle-btn');
-  const sections = document.querySelectorAll('.profile-section');
-  const profileImg = document.getElementById('profile-img');
-  const handleText = document.getElementById('handle-text');
+  // Hash routing: #rummyshoots and #rummspace open a profile, anything else is home.
+  // Profiles are linkable (moinulax.github.io/#rummspace) and the back button works.
+  const views = { rummyshoots: 1, rummspace: 1 };
 
-    const data = {
-    rummyshoots: { handle: '@rummyshoots', img: 'img/rummy.jpeg' },
-    rummspace:   { handle: '@rummspace',   img: 'img/rs-logo.svg' }
-  };
+  function show() {
+    const id = location.hash.slice(1);
+    const target = views[id] ? id : 'home';
+    document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === target));
+    document.title = target === 'rummyshoots' ? 'Rummyshoots' : target === 'rummspace' ? 'RummSpace' : 'Rummy';
+    window.scrollTo(0, 0);
+  }
 
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.dataset.target;
-      buttons.forEach(b => b.classList.toggle('active', b === btn));
-      sections.forEach(s => {
-        s.classList.toggle('visible', s.id === target);
-      });
-      profileImg.style.opacity = '0';
-      profileImg.style.transition = 'opacity 0.2s';
-      setTimeout(() => {
-        profileImg.src = data[target].img;
-        if (target === 'rummspace') {
-          profileImg.style.filter = 'none';
-        } else {
-          profileImg.style.filter = 'grayscale(100%) contrast(1.1)';
-        }
-        profileImg.style.opacity = '1';
-      }, 200);
-      handleText.textContent = data[target].handle;
-    });
-  });
+  let running = null;
+  function route() {
+    // A fast second tap finishes the running animation first, so the view always matches the URL.
+    if (running) running.skipTransition();
+    if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      running = document.startViewTransition(show);
+      running.finished.finally(() => { running = null; });
+    } else {
+      show();
+    }
+  }
+
+  // "← All accounts" clears the hash instead of leaving a bare "#" in the URL.
+  document.querySelectorAll('.back').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    if (history.state && history.state.fromHome) { history.back(); return; }
+    history.pushState(null, '', location.pathname);
+    route();
+  }));
+  document.querySelectorAll('.card[href^="#"]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    history.pushState({ fromHome: true }, '', a.getAttribute('href'));
+    route();
+  }));
+
+  window.addEventListener('popstate', route);
+  show();
 </script>
 </body>
 </html>
